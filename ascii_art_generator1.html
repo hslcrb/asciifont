@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>ASCII ART // SUPER GENERATOR</title>
+<style>
+  :root {
+    --bg: #060a06;
+    --bg-panel: #0b120c;
+    --phosphor: #39ff6a;
+    --phosphor-dim: #1c8f3c;
+    --phosphor-glow: rgba(57, 255, 106, 0.35);
+    --amber: #ffb000;
+    --line: #163d1e;
+    --text-muted: #6ba97c;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse at top, rgba(57,255,106,0.06), transparent 60%),
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 3px);
+    color: var(--phosphor);
+    font-family: ui-monospace, 'Cascadia Mono', 'SFMono-Regular', Consolas, Menlo, 'DejaVu Sans Mono', 'Liberation Mono', monospace;
+    min-height: 100vh;
+  }
+  .crt {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 28px 20px 60px;
+  }
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 10px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .brand {
+    font-size: 13px;
+    letter-spacing: 0.35em;
+    color: var(--phosphor-dim);
+  }
+  .brand b { color: var(--phosphor); text-shadow: 0 0 8px var(--phosphor-glow); }
+  .clock { font-size: 12px; color: var(--text-muted); letter-spacing: 0.05em; }
+
+  .title-block { margin-bottom: 22px; }
+  .title-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--amber);
+    margin-bottom: 6px;
+  }
+  .title-block h1 {
+    margin: 0;
+    font-size: clamp(22px, 4vw, 34px);
+    font-weight: 700;
+    color: var(--phosphor);
+    text-shadow: 0 0 10px var(--phosphor-glow);
+    line-height: 1.3;
+  }
+  .title-block p {
+    margin: 8px 0 0;
+    color: var(--text-muted);
+    font-size: 13px;
+    max-width: 60ch;
+  }
+
+  .panel {
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(57,255,106,0.02), transparent);
+    padding: 18px;
+    margin-bottom: 18px;
+  }
+  .panel-label {
+    font-size: 11px;
+    color: var(--phosphor-dim);
+    letter-spacing: 0.2em;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--phosphor-dim);
+    padding: 10px 14px;
+    background: #030603;
+  }
+  .prompt-caret { color: var(--amber); font-weight: bold; }
+  #textInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--phosphor);
+    font-family: inherit;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    caret-color: var(--amber);
+  }
+  #textInput::placeholder { color: var(--phosphor-dim); }
+
+  .meta-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .charcount.over { color: #ff5555; }
+
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  button {
+    font-family: inherit;
+    background: transparent;
+    border: 1px solid var(--phosphor-dim);
+    color: var(--phosphor);
+    padding: 9px 16px;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  button:hover {
+    background: var(--phosphor);
+    color: #04140a;
+    box-shadow: 0 0 14px var(--phosphor-glow);
+  }
+  button:active { transform: translateY(1px); }
+  button.secondary { border-color: var(--line); color: var(--text-muted); }
+  button.secondary:hover { background: var(--text-muted); color: #04140a; }
+
+  .output-wrap {
+    border: 1px solid var(--line);
+    background: #020402;
+    padding: 4px;
+  }
+  .output-scroll {
+    overflow-x: auto;
+    padding: 32px 24px;
+  }
+  #outputVisual {
+    display: inline-block;
+    min-height: 60px;
+  }
+  #outputVisual svg { display: block; }
+  #outputVisual .placeholder {
+    color: var(--phosphor-dim);
+    font-size: 13px;
+    display: inline-block;
+    padding: 4px 0;
+  }
+
+
+  .support-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+  .support-note code {
+    color: var(--amber);
+    background: rgba(255,176,0,0.08);
+    padding: 1px 5px;
+  }
+
+  .footer {
+    margin-top: 28px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    font-size: 11px;
+    color: var(--phosphor-dim);
+    letter-spacing: 0.15em;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--phosphor);
+    color: #04140a;
+    padding: 9px 18px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s ease;
+    box-shadow: 0 0 20px var(--phosphor-glow);
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  @media (max-width: 560px) {
+    .crt { padding: 18px 14px 40px; }
+  }
+</style>
+</head>
+<body>
+<div class="crt">
+  <div class="topbar">
+    <div class="brand">TERM<b>://ASCII</b>-GEN</div>
+    <div class="clock" id="clock">-- : -- : --</div>
+  </div>
+
+  <div class="title-block">
+    <div class="title-eyebrow">// BLOCK-LINE FIGLET RENDERER</div>
+    <h1>영문/숫자/특수문자 → 아스키 아트 변환기</h1>
+    <p>텍스트를 입력하면 박스 드로잉 문자로 된 굵은 라인 스타일 아스키 아트로 즉시 변환합니다. 알파벳, 숫자, 대부분의 특수문자를 지원합니다.</p>
+  </div>
+
+  <div class="panel">
+    <div class="panel-label"><span>INPUT</span><span id="rangeHint">A-Z 0-9 !@#$%...</span></div>
+    <div class="input-row">
+      <span class="prompt-caret">&gt;</span>
+      <input id="textInput" type="text" maxlength="40" placeholder="SUPER" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="meta-row">
+      <span id="charcount" class="charcount">0 / 40</span>
+      <span id="unsupportedNote"></span>
+    </div>
+    <div class="controls">
+      <button id="copyBtn">COPY OUTPUT</button>
+      <button id="downloadBtn" class="secondary">DOWNLOAD .TXT</button>
+      <button id="downloadSvgBtn" class="secondary">DOWNLOAD .SVG</button>
+      <label class="toggle-inline">
+        <input type="checkbox" id="transparentBg">
+        <span>투명 배경</span>
+      </label>
+      <button id="clearBtn" class="secondary">CLEAR</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-label"><span>FONT EXPORT</span><span>OTF / TTF</span></div>
+    <div class="input-row">
+      <span class="prompt-caret">#</span>
+      <input id="fontNameInput" type="text" maxlength="40" placeholder="폰트 이름 (예: MyBlockFont)" autocomplete="off" spellcheck="false" value="ASCII Shadow Custom">
+    </div>
+    <div class="controls">
+      <button id="downloadTtfBtn" class="secondary">DOWNLOAD .TTF</button>
+      <button id="downloadOtfBtn" class="secondary">DOWNLOAD .OTF</button>
+    </div>
+    <div class="support-note">지원되는 모든 문자(A-Z, a-z, 0-9, 일부 특수문자)를 담은 폰트 파일을 그 자리에서 생성합니다. 서버에 저장하지 않고 브라우저에서 즉시 만들어서 다운로드하므로, 다시 눌러도 항상 같은 결과가 나옵니다.</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-label"><span>OUTPUT</span><span id="dimHint"></span></div>
+    <div class="output-wrap">
+      <div class="output-scroll">
+        <div id="outputVisual"><span class="placeholder">여기에 결과가 표시됩니다. 위 칸에 텍스트를 입력해보세요.</span></div>
+      </div>
+    </div>
+    <div class="support-note">지원하지 않는 문자는 공백으로 대체됩니다. 폭이 넓은 문구는 가로 스크롤로 확인하거나 <code>DOWNLOAD .TXT</code>로 저장해서 코드블록에 붙여넣으세요.</div>
+  </div>
+
+  <div class="footer">
+    <span>MONOSPACE-SAFE OUTPUT</span>
+    <span id="dimsFooter">READY</span>
+  </div>
+</div>
+
+<div class="toast" id="toast">COPIED TO CLIPBOARD</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/opentype.js/0.6.5/opentype.min.js"></script>
+<script>
+const FONT_DATA = {"height":7,"font":{"0":[" ██████╗ ","██╔═████╗","██║██╔██║","████╔╝██║","╚██████╔╝"," ╚═════╝ ","         "],"1":[" ██╗","███║","╚██║"," ██║"," ██║"," ╚═╝","    "],"2":["██████╗ ","╚════██╗"," █████╔╝","██╔═══╝ ","███████╗","╚══════╝","        "],"3":["██████╗ ","╚════██╗"," █████╔╝"," ╚═══██╗","██████╔╝","╚═════╝ ","        "],"4":["██╗  ██╗","██║  ██║","███████║","╚════██║","     ██║","     ╚═╝","        "],"5":["███████╗","██╔════╝","███████╗","╚════██║","███████║","╚══════╝","        "],"6":[" ██████╗ ","██╔════╝ ","███████╗ ","██╔═══██╗","╚██████╔╝"," ╚═════╝ ","         "],"7":["███████╗","╚════██║","    ██╔╝","   ██╔╝ ","   ██║  ","   ╚═╝  ","        "],"8":[" █████╗ ","██╔══██╗","╚█████╔╝","██╔══██╗","╚█████╔╝"," ╚════╝ ","        "],"9":[" █████╗ ","██╔══██╗","╚██████║"," ╚═══██║"," █████╔╝"," ╚════╝ ","        "]," ":["    ","    ","    ","    ","    ","    ","    "],"!":["██╗","██║","██║","╚═╝","██╗","╚═╝","   "],"\"":["","","","","","",""],"#":[" ██╗ ██╗ ","████████╗","╚██╔═██╔╝","████████╗","╚██╔═██╔╝"," ╚═╝ ╚═╝ ","         "],"$":["▄▄███▄▄·","██╔════╝","███████╗","╚════██║","███████║","╚═▀▀▀══╝","        "],"%":["██╗ ██╗","╚═╝██╔╝","  ██╔╝ "," ██╔╝  ","██╔╝██╗","╚═╝ ╚═╝","       "],"&":["   ██╗   ","   ██║   ","████████╗","██╔═██╔═╝","██████║  ","╚═════╝  ","         "],"'":["","","","","","",""],"(":[" ██╗","██╔╝","██║ ","██║ ","╚██╗"," ╚═╝","    "],")":["██╗ ","╚██╗"," ██║"," ██║","██╔╝","╚═╝ ","    "],"*":["      ","▄ ██╗▄"," ████╗","▀╚██╔▀","  ╚═╝ ","      ","      "],"+":["","","","","","",""],",":["   ","   ","   ","   ","▄█╗","╚═╝","   "],"-":["      ","      ","█████╗","╚════╝","      ","      ","      "],".":["   ","   ","   ","   ","██╗","╚═╝","   "],"/":["    ██╗","   ██╔╝","  ██╔╝ "," ██╔╝  ","██╔╝   ","╚═╝    ","       "],":":["   ","██╗","╚═╝","██╗","╚═╝","   ","   "],";":["   ","██╗","╚═╝","▄█╗","▀═╝","   ","   "],"<":["  ██╗"," ██╔╝","██╔╝ ","╚██╗ "," ╚██╗","  ╚═╝","     "],"=":["","","","","","",""],">":["██╗  ","╚██╗ "," ╚██╗"," ██╔╝","██╔╝ ","╚═╝  ","     "],"?":["██████╗ ","╚════██╗","  ▄███╔╝","  ▀▀══╝ ","  ██╗   ","  ╚═╝   ","        "],"@":[" ██████╗ ","██╔═══██╗","██║██╗██║","██║██║██║","╚█║████╔╝"," ╚╝╚═══╝ ","         "],"A":[" █████╗ ","██╔══██╗","███████║","██╔══██║","██║  ██║","╚═╝  ╚═╝","        "],"B":["██████╗ ","██╔══██╗","██████╔╝","██╔══██╗","██████╔╝","╚═════╝ ","        "],"C":[" ██████╗","██╔════╝","██║     ","██║     ","╚██████╗"," ╚═════╝","        "],"D":["██████╗ ","██╔══██╗","██║  ██║","██║  ██║","██████╔╝","╚═════╝ ","        "],"E":["███████╗","██╔════╝","█████╗  ","██╔══╝  ","███████╗","╚══════╝","        "],"F":["███████╗","██╔════╝","█████╗  ","██╔══╝  ","██║     ","╚═╝     ","        "],"G":[" ██████╗ ","██╔════╝ ","██║  ███╗","██║   ██║","╚██████╔╝"," ╚═════╝ ","         "],"H":["██╗  ██╗","██║  ██║","███████║","██╔══██║","██║  ██║","╚═╝  ╚═╝","        "],"I":["██╗","██║","██║","██║","██║","╚═╝","   "],"J":["     ██╗","     ██║","     ██║","██   ██║","╚█████╔╝"," ╚════╝ ","        "],"K":["██╗  ██╗","██║ ██╔╝","█████╔╝ ","██╔═██╗ ","██║  ██╗","╚═╝  ╚═╝","        "],"L":["██╗     ","██║     ","██║     ","██║     ","███████╗","╚══════╝","        "],"M":["███╗   ███╗","████╗ ████║","██╔████╔██║","██║╚██╔╝██║","██║ ╚═╝ ██║","╚═╝     ╚═╝","           "],"N":["███╗   ██╗","████╗  ██║","██╔██╗ ██║","██║╚██╗██║","██║ ╚████║","╚═╝  ╚═══╝","          "],"O":[" ██████╗ ","██╔═══██╗","██║   ██║","██║   ██║","╚██████╔╝"," ╚═════╝ ","         "],"P":["██████╗ ","██╔══██╗","██████╔╝","██╔═══╝ ","██║     ","╚═╝     ","        "],"Q":[" ██████╗ ","██╔═══██╗","██║   ██║","██║▄▄ ██║","╚██████╔╝"," ╚══▀▀═╝ ","         "],"R":["██████╗ ","██╔══██╗","██████╔╝","██╔══██╗","██║  ██║","╚═╝  ╚═╝","        "],"S":["███████╗","██╔════╝","███████╗","╚════██║","███████║","╚══════╝","        "],"T":["████████╗","╚══██╔══╝","   ██║   ","   ██║   ","   ██║   ","   ╚═╝   ","         "],"U":["██╗   ██╗","██║   ██║","██║   ██║","██║   ██║","╚██████╔╝"," ╚═════╝ ","         "],"V":["██╗   ██╗","██║   ██║","██║   ██║","╚██╗ ██╔╝"," ╚████╔╝ ","  ╚═══╝  ","         "],"W":["██╗    ██╗","██║    ██║","██║ █╗ ██║","██║███╗██║","╚███╔███╔╝"," ╚══╝╚══╝ ","          "],"X":["██╗  ██╗","╚██╗██╔╝"," ╚███╔╝ "," ██╔██╗ ","██╔╝ ██╗","╚═╝  ╚═╝","        "],"Y":["██╗   ██╗","╚██╗ ██╔╝"," ╚████╔╝ ","  ╚██╔╝  ","   ██║   ","   ╚═╝   ","         "],"Z":["███████╗","╚══███╔╝","  ███╔╝ "," ███╔╝  ","███████╗","╚══════╝","        "],"[":["███╗","██╔╝","██║ ","██║ ","███╗","╚══╝","    "],"\\":["","","","","","",""],"]":["███╗","╚██║"," ██║"," ██║","███║","╚══╝","    "],"^":[" ███╗ ","██╔██╗","╚═╝╚═╝","      ","      ","      ","      "],"_":["        ","        ","        ","        ","███████╗","╚══════╝","        "],"`":["","","","","","",""],"a":[" █████╗ ","██╔══██╗","███████║","██╔══██║","██║  ██║","╚═╝  ╚═╝","        "],"b":["██████╗ ","██╔══██╗","██████╔╝","██╔══██╗","██████╔╝","╚═════╝ ","        "],"c":[" ██████╗","██╔════╝","██║     ","██║     ","╚██████╗"," ╚═════╝","        "],"d":["██████╗ ","██╔══██╗","██║  ██║","██║  ██║","██████╔╝","╚═════╝ ","        "],"e":["███████╗","██╔════╝","█████╗  ","██╔══╝  ","███████╗","╚══════╝","        "],"f":["███████╗","██╔════╝","█████╗  ","██╔══╝  ","██║     ","╚═╝     ","        "],"g":[" ██████╗ ","██╔════╝ ","██║  ███╗","██║   ██║","╚██████╔╝"," ╚═════╝ ","         "],"h":["██╗  ██╗","██║  ██║","███████║","██╔══██║","██║  ██║","╚═╝  ╚═╝","        "],"i":["██╗","██║","██║","██║","██║","╚═╝","   "],"j":["     ██╗","     ██║","     ██║","██   ██║","╚█████╔╝"," ╚════╝ ","        "],"k":["██╗  ██╗","██║ ██╔╝","█████╔╝ ","██╔═██╗ ","██║  ██╗","╚═╝  ╚═╝","        "],"l":["██╗     ","██║     ","██║     ","██║     ","███████╗","╚══════╝","        "],"m":["███╗   ███╗","████╗ ████║","██╔████╔██║","██║╚██╔╝██║","██║ ╚═╝ ██║","╚═╝     ╚═╝","           "],"n":["███╗   ██╗","████╗  ██║","██╔██╗ ██║","██║╚██╗██║","██║ ╚████║","╚═╝  ╚═══╝","          "],"o":[" ██████╗ ","██╔═══██╗","██║   ██║","██║   ██║","╚██████╔╝"," ╚═════╝ ","         "],"p":["██████╗ ","██╔══██╗","██████╔╝","██╔═══╝ ","██║     ","╚═╝     ","        "],"q":[" ██████╗ ","██╔═══██╗","██║   ██║","██║▄▄ ██║","╚██████╔╝"," ╚══▀▀═╝ ","         "],"r":["██████╗ ","██╔══██╗","██████╔╝","██╔══██╗","██║  ██║","╚═╝  ╚═╝","        "],"s":["███████╗","██╔════╝","███████╗","╚════██║","███████║","╚══════╝","        "],"t":["████████╗","╚══██╔══╝","   ██║   ","   ██║   ","   ██║   ","   ╚═╝   ","         "],"u":["██╗   ██╗","██║   ██║","██║   ██║","██║   ██║","╚██████╔╝"," ╚═════╝ ","         "],"v":["██╗   ██╗","██║   ██║","██║   ██║","╚██╗ ██╔╝"," ╚████╔╝ ","  ╚═══╝  ","         "],"w":["██╗    ██╗","██║    ██║","██║ █╗ ██║","██║███╗██║","╚███╔███╔╝"," ╚══╝╚══╝ ","          "],"x":["██╗  ██╗","╚██╗██╔╝"," ╚███╔╝ "," ██╔██╗ ","██╔╝ ██╗","╚═╝  ╚═╝","        "],"y":["██╗   ██╗","╚██╗ ██╔╝"," ╚████╔╝ ","  ╚██╔╝  ","   ██║   ","   ╚═╝   ","         "],"z":["███████╗","╚══███╔╝","  ███╔╝ "," ███╔╝  ","███████╗","╚══════╝","        "],"{":["","","","","","",""],"|":["","","","","","",""],"}":["","","","","","",""],"~":["","","","","","",""]}};
+const HEIGHT = FONT_DATA.height;
+const FONT = FONT_DATA.font;
+
+function clockTick() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  document.getElementById('clock').textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+}
+clockTick();
+setInterval(clockTick, 1000);
+
+// --- Vector glyph patterns -------------------------------------------------
+// The FIGfont only ever uses 11 distinct glyph characters. Instead of relying
+// on the browser/OS font to draw box-drawing characters (which varies by
+// font, breaks at different line-heights, and blurs unpredictably under
+// text-shadow), each glyph is defined here as a set of simple rectangles in
+// a normalized 0..1 cell. The whole word is then drawn as one SVG. This is
+// 100% font-independent: it will look identical everywhere, at any size.
+const T0 = 0.5 - 0.16, T1 = 0.5 + 0.16; // thickness band for lines
+const GLYPH_RECTS = {
+  ' ': [],
+  '█': [[0, 0, 1, 1]],
+  '▀': [[0, 0, 1, 0.5]],
+  '▄': [[0, 0.5, 1, 1]],
+  '·': [[0.36, 0.36, 0.64, 0.64]],
+  '║': [[T0, 0, T1, 1]],
+  '═': [[0, T0, 1, T1]],
+  '╔': [[T0, 0.5, T1, 1], [0.5, T0, 1, T1]],
+  '╗': [[T0, 0.5, T1, 1], [0, T0, 0.5, T1]],
+  '╚': [[T0, 0, T1, 0.5], [0.5, T0, 1, T1]],
+  '╝': [[T0, 0, T1, 0.5], [0, T0, 0.5, T1]],
+};
+
+const CELL_W = 20;
+const CELL_H = 36;
+
+function glyphFor(ch) {
+  if (FONT[ch]) return FONT[ch];
+  const upper = ch.toUpperCase();
+  if (FONT[upper]) return FONT[upper];
+  return null;
+}
+
+// Builds the plain-text version (for copy / download / char counts).
+function renderText(text) {
+  if (!text) return { art: '', unsupported: [], width: 0 };
+  const rows = new Array(HEIGHT).fill('');
+  const unsupported = [];
+  for (const ch of text) {
+    const glyph = glyphFor(ch);
+    if (glyph) {
+      for (let r = 0; r < HEIGHT; r++) rows[r] += glyph[r];
+    } else {
+      if (ch.trim() !== '' && !unsupported.includes(ch)) unsupported.push(ch);
+      for (let r = 0; r < HEIGHT; r++) rows[r] += '   ';
+    }
+  }
+  const width = rows[0] ? rows[0].length : 0;
+  return { art: rows.join('\n'), unsupported, width };
+}
+
+// Builds the SVG (visual) version, font-independent.
+function renderSVG(text) {
+  if (!text) return { svg: '', width: 0 };
+  const glyphs = [];
+  for (const ch of text) {
+    const glyph = glyphFor(ch);
+    glyphs.push(glyph || new Array(HEIGHT).fill('   '));
+  }
+  const totalCols = glyphs.reduce((sum, g) => sum + (g[0] ? g[0].length : 0), 0);
+  const svgW = totalCols * CELL_W;
+  const svgH = HEIGHT * CELL_H;
+
+  let rects = '';
+  let colOffset = 0;
+  for (const glyph of glyphs) {
+    const cols = glyph[0] ? glyph[0].length : 0;
+    for (let r = 0; r < HEIGHT; r++) {
+      const line = glyph[r] || '';
+      for (let c = 0; c < cols; c++) {
+        const ch = line[c] || ' ';
+        const pattern = GLYPH_RECTS[ch];
+        if (!pattern || pattern.length === 0) continue;
+        const cellX = (colOffset + c) * CELL_W;
+        const cellY = r * CELL_H;
+        for (const [x0, y0, x1, y1] of pattern) {
+          const rx = cellX + x0 * CELL_W;
+          const ry = cellY + y0 * CELL_H;
+          const rw = (x1 - x0) * CELL_W;
+          const rh = (y1 - y0) * CELL_H;
+          rects += `<rect x="${rx.toFixed(2)}" y="${ry.toFixed(2)}" width="${rw.toFixed(2)}" height="${rh.toFixed(2)}"/>`;
+        }
+      }
+    }
+    colOffset += cols;
+  }
+
+  const svg = `<svg viewBox="0 0 ${svgW} ${svgH}" width="${svgW}" height="${svgH}" xmlns="http://www.w3.org/2000/svg">
+    <g fill="var(--phosphor)">${rects}</g>
+  </svg>`;
+
+  // Standalone version for file download: hardcoded colors (no CSS vars),
+  // plus a dark background rect so it looks right when opened on its own.
+  const standaloneSvg = `<svg viewBox="0 0 ${svgW} ${svgH}" width="${svgW}" height="${svgH}" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="${svgW}" height="${svgH}" fill="#04140a"/>
+  <g fill="#39ff6a">${rects}</g>
+</svg>`;
+
+  return { svg, standaloneSvg, width: totalCols };
+}
+
+const input = document.getElementById('textInput');
+const outputVisual = document.getElementById('outputVisual');
+const charcount = document.getElementById('charcount');
+const unsupportedNote = document.getElementById('unsupportedNote');
+const dimsFooter = document.getElementById('dimsFooter');
+const dimHint = document.getElementById('dimHint');
+
+let currentArt = '';
+let currentSVG = '';
+
+function update() {
+  const val = input.value;
+  charcount.textContent = val.length + ' / 40';
+  charcount.classList.toggle('over', val.length >= 40);
+
+  const { art, unsupported } = renderText(val);
+  currentArt = art;
+
+  if (!val) {
+    outputVisual.innerHTML = '<span class="placeholder">여기에 결과가 표시됩니다. 위 칸에 텍스트를 입력해보세요.</span>';
+    dimsFooter.textContent = 'READY';
+    dimHint.textContent = '';
+    unsupportedNote.textContent = '';
+    currentSVG = '';
+    return;
+  }
+
+  const { svg, standaloneSvg, width } = renderSVG(val);
+  outputVisual.innerHTML = svg;
+  currentSVG = standaloneSvg;
+  dimsFooter.textContent = width + ' COLS x ' + HEIGHT + ' ROWS';
+  dimHint.textContent = width + 'x' + HEIGHT;
+
+  if (unsupported.length) {
+    unsupportedNote.textContent = '미지원 문자: ' + unsupported.join(' ');
+  } else {
+    unsupportedNote.textContent = '';
+  }
+}
+
+input.addEventListener('input', update);
+input.value = 'SUPER';
+update();
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 1600);
+}
+
+document.getElementById('copyBtn').addEventListener('click', async () => {
+  if (!currentArt || !input.value) { showToast('먼저 텍스트를 입력하세요'); return; }
+  try {
+    await navigator.clipboard.writeText(currentArt);
+    showToast('복사 완료 (코드블록에 붙여넣으세요)');
+  } catch (e) {
+    showToast('복사 실패 - 직접 선택해서 복사해주세요');
+  }
+});
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  input.value = '';
+  update();
+  input.focus();
+});
+
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  if (!currentArt || !input.value) { showToast('먼저 텍스트를 입력하세요'); return; }
+  const blob = new Blob([currentArt], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (input.value.replace(/[^a-zA-Z0-9]/g, '_') || 'ascii_art') + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('다운로드 시작');
+});
+
+document.getElementById('downloadSvgBtn').addEventListener('click', () => {
+  if (!currentSVG || !input.value) { showToast('먼저 텍스트를 입력하세요'); return; }
+  const blob = new Blob([currentSVG], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (input.value.replace(/[^a-zA-Z0-9]/g, '_') || 'ascii_art') + '.svg';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('SVG 다운로드 시작');
+});
+
+</script>
+</body>
+</html>
