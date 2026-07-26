@@ -166,96 +166,6 @@
     padding: 4px 0;
   }
 
-  /* SVG settings */
-  .svg-settings {
-    border: 1px solid var(--line);
-    border-top: none;
-    padding: 14px 18px;
-    background: #030803;
-    display: none;
-  }
-  .svg-settings.open { display: block; }
-  .svg-settings-row {
-    display: flex;
-    gap: 18px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .svg-settings-row + .svg-settings-row { margin-top: 10px; }
-  .svg-setting-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .svg-setting-group label {
-    font-size: 11px;
-    color: var(--text-muted);
-    white-space: nowrap;
-    letter-spacing: 0.1em;
-  }
-  .svg-setting-group input[type="range"] {
-    width: 80px;
-    height: 4px;
-    -webkit-appearance: none;
-    appearance: none;
-    background: var(--phosphor-dim);
-    border-radius: 2px;
-    outline: none;
-  }
-  .svg-setting-group input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--phosphor);
-    cursor: pointer;
-    box-shadow: 0 0 6px var(--phosphor-glow);
-  }
-  .svg-setting-group input[type="range"]::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--phosphor);
-    border: none;
-    cursor: pointer;
-  }
-  .svg-val {
-    font-size: 12px;
-    color: var(--phosphor);
-    min-width: 24px;
-    text-align: right;
-  }
-  .svg-setting-group input[type="color"] {
-    width: 28px;
-    height: 28px;
-    padding: 0;
-    border: 1px solid var(--phosphor-dim);
-    background: transparent;
-    cursor: pointer;
-    border-radius: 2px;
-  }
-  .svg-setting-group input[type="color"]::-webkit-color-swatch-wrapper { padding: 2px; }
-  .svg-setting-group input[type="color"]::-webkit-color-swatch { border: none; border-radius: 1px; }
-  .control-icon {
-    font-size: 11px;
-    color: var(--text-muted);
-    cursor: pointer;
-    user-select: none;
-  }
-  .control-icon:hover { color: var(--phosphor); }
-
-  .toggle-inline {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    color: var(--text-muted);
-    cursor: pointer;
-    letter-spacing: 0.1em;
-  }
-  .toggle-inline input[type="checkbox"] {
-    accent-color: var(--phosphor);
-  }
 
   .support-note {
     font-size: 11px;
@@ -304,7 +214,6 @@
 
   @media (max-width: 560px) {
     .crt { padding: 18px 14px 40px; }
-    .svg-settings-row { flex-direction: column; align-items: stretch; }
   }
 </style>
 </head>
@@ -334,35 +243,12 @@
     <div class="controls">
       <button id="copyBtn">COPY OUTPUT</button>
       <button id="downloadBtn" class="secondary">DOWNLOAD .TXT</button>
-      <button id="downloadSvgBtn" class="secondary">DOWNLOAD SVG</button>
+      <button id="downloadSvgBtn" class="secondary">DOWNLOAD .SVG</button>
       <label class="toggle-inline">
         <input type="checkbox" id="transparentBg">
         <span>투명 배경</span>
       </label>
-      <span class="control-icon" id="svgSettingsToggle">▼ SVG SETTINGS</span>
       <button id="clearBtn" class="secondary">CLEAR</button>
-    </div>
-    <div class="svg-settings" id="svgSettings">
-      <div class="svg-settings-row">
-        <div class="svg-setting-group">
-          <label>CELL W</label>
-          <input type="range" id="cellWidthSlider" min="8" max="40" value="20" step="1">
-          <span class="svg-val" id="cellWidthVal">20</span>
-        </div>
-        <div class="svg-setting-group">
-          <label>CELL H</label>
-          <input type="range" id="cellHeightSlider" min="16" max="64" value="36" step="1">
-          <span class="svg-val" id="cellHeightVal">36</span>
-        </div>
-        <div class="svg-setting-group">
-          <label>FG</label>
-          <input type="color" id="fgColorPicker" value="#39ff6a">
-        </div>
-        <div class="svg-setting-group">
-          <label>BG</label>
-          <input type="color" id="bgColorPicker" value="#04140a">
-        </div>
-      </div>
     </div>
   </div>
 
@@ -399,20 +285,27 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/opentype.js/0.6.5/opentype.min.js"></script>
 <script>
-var FONT_DATA = {"height":7,"font":{"0":[" ██████╗ ","██╔═████╗","██║██╔██║","████╔╝██║","╚██████╔╝"," ╚═════╝ ","         "],"1":[" ██╗","███║","╚██║"," ██║"," ██║"," ╚═╝","    "],"2":["██████╗ ","╚════██╗"," █████╔╝","██╔═══╝ ","███████╗","╚══════╝","        "],"3":["██████╗ ","╚════██╗"," █████╔╝"," ╚═══██╗","██████╔╝","╚═════╝ ","        "],"4":["██╗  ██╗","██║  ██║","███████║","╚════██║","     ██║","     ╚═╝","        "],"5":["███████╗","██╔════╝","███████╗","╚════██║","███████║","╚══════╝","        "],"6":[" ██████╗ ","██╔════╝ ","███████╗ ","██╔═══██╗","╚██████╔╝"," ╚═════╝ ","         "],"7":["███████╗","╚════██║","    ██╔╝","   ██╔╝ ","   ██║  ","   ╚═╝  ","        "],"8":[" █████╗ ","██╔══██╗","╚█████╔╝","██╔══██╗","╚█████╔╝"," ╚════╝ ","        "],"9":[" █████╗ ","██╔══██╗","╚██████║"," ╚═══██║"," █████╔╝"," ╚════╝ ","        "]," ":["    ","    ","    ","    ","    ","    ","    "],"!":["██╗","██║","██║","╚═╝","██╗","╚═╝","   "],"\"":["","","","","","",""],"#":[" ██╗ ██╗ ","████████╗","╚██╔═██╔╝","████████╗","╚██╔═██╔╝"," ╚═╝ ╚═╝ ","         "],"$":["▄▄███▄▄·","██╔════╝","███████╗","╚════██║","███████║","╚═▀▀▀══╝","        "],"%":["██╗ ██╗","╚═╝██╔╝","  ██╔╝ "," ██╔╝  ","██╔╝██╗","╚═╝ ╚═╝","       "],"&":["   ██╗   ","   ██║   ","████████╗","██╔═██╔═╝","██████║  ","╚═════╝  ","         "],"'":["","","","","","",""],"(":[" ██╗","██╔╝","██║ ","██║ ","╚██╗"," ╚═╝","    "],")":["██╗ ","╚██╗"," ██║"," ██║","██╔╝","╚═╝ ","    "],"*":["      ","▄ ██╗▄"," ████╗","▀╚██╔▀","  ╚═╝ ","      ","      "],"+":["","","","","","",""],",":["   ","   ","   ","   ","▄█╗","╚═╝","   "],"-":["      ","      ","█████╗","╚════╝","      ","      ","      "],".":["   ","   ","   ","   ","██╗","╚═╝","   "],"/":["    ██╗","   ██╔╝","  ██╔╝ "," ██╔╝  ","██╔╝   ","╚═╝    ","       "],":":["   ","██╗","╚═╝","██╗","╚═╝","   ","   "],";":["   ","██╗","╚═╝","▄█╗","▀═╝","   ","   "],"<":["  ██╗"," ██╔╝","██╔╝ ","╚██╗ "," ╚██╗","  ╚═╝","     "],"=":["","","","","","",""],">":["██╗  ","╚██╗ "," ██║ "," ██║ ","╚██╗╗"," ╚══╝","     "],"?":[" █████╗ ","██╔══██╗","╚█████╔╝"," ╚═══██╗"," ██╗  ╚═╝"," ╚═╝     ","         "],"@":[" ██████╗ ","██╔════╝ ","███████╗ ","██╔══ ██╗","╚██████╔╝"," ╚═════╝ ","         "],"A":[" █████╗ ","██╔══██╗","███████║","██╔══██║","██║  ██║","╚═╝  ╚═╝","        "],"B":["██████╗ ","██╔══██╗","██████╔╝","██╔══██╗","██████╔╝","╚═════╝ ","        "],"C":[" █████╗ ","██╔══██╗","██║    ","██║    ","╚██████║"," ╚═════╝","        "],"D":["██████╗ ","██╔══██╗","██║  ██║","██║  ██║","██████╔╝","╚═════╝ ","        "],"E":["███████╗","██╔════╝","███████╗","██╔════╝","███████╗","╚══════╝","        "],"F":["███████╗","██╔════╝","███████╗","██╔════╝","██║     ","╚═╝     ","        "],"G":[" █████╗ ","██╔══██╗","██║  ██╗","██║  ╚██╗","╚██████║"," ╚═════╝","        "],"H":["██╗  ██╗","██║  ██║","███████║","██╔══██║","██║  ██║","╚═╝  ╚═╝","        "],"I":["██╗","██║","██║","██║","██║","╚═╝","   "],"J":["     ██╗","     ██║","     ██║","██╗  ██║","╚█████╔╝"," ╚════╝ ","        "],"K":["██╗  ██╗","██║ ██╔╝","█████╔╝ ","██╔═██╗ ","██║ ╚██╗","╚═╝  ╚═╝","        "],"L":["██╗     ","██║     ","██║     ","██║     ","███████╗","╚══════╝","        "],"M":["███╗ ███╗","████╗████║","██╔████╔██║","██║╚██╔╝██║","██║ ╚═╝ ██║","╚═╝     ╚═╝","            "],"N":["███╗  ██╗","████╗ ██║","██╔██╗██║","██║╚████║","██║ ╚███║","╚═╝  ╚══╝","          "],"O":[" █████╗ ","██╔══██╗","██║  ██║","██║  ██║","╚██████║"," ╚═════╝","        "],"P":["██████╗ ","██╔══██╗","██████╔╝","██╔═══╝ ","██║     ","╚═╝     ","        "],"Q":[" █████╗ ","██╔══██╗","██║  ██║","██║  ██║","╚██████║","  ╚═╗ ██╗","    ╚═╝   "],"R":["██████╗ ","██╔══██╗","██████╔╝","██╔══██╗","██║  ██║","╚═╝  ╚═╝","        "],"S":[" █████╗ ","██╔══██╗","╚█████╔╝","██╔══██╗","╚█████╔╝"," ╚════╝ ","        "],"T":["████████╗","╚══██╔══╝","   ██║   ","   ██║   ","   ██║   ","   ╚═╝   ","        "],"U":["██╗  ██╗","██║  ██║","██║  ██║","██║  ██║","╚██████║"," ╚═════╝","        "],"V":["██╗  ██╗","██║  ██║","██║  ██║","██║  ██║","╚██████║"," ╚═════╝","        "],"W":["██╗    ██╗","██║    ██║","██║ █╗ ██║","██║███╗██║","╚███╔███╔╝"," ╚══╝╚══╝ ","          "],"X":["██╗  ██╗","╚██╗██╔╝"," ╚███╔╝ "," ██╔██╗ ","██╔╝╚██╗","╚═╝  ╚═╝","        "],"Y":["██╗  ██╗","╚██╗██╔╝"," ╚███╔╝ ","  ██╔╝  ","  ██║   ","  ╚═╝   ","        "],"Z":["███████╗","   ╚═██╗"," █████╔╝","██╔═══╝ ","███████╗","╚══════╝","        "],"[":["███╗","██╔╝","██║ ","██║ ","███╗","╚══╝","    "],"\\":["","","","","","",""],"]":["███╗","╚██║"," ██║"," ██║","███║","╚══╝","    "],"^":["   ","██╗","╚═╝","   ","   ","   ","   "],"_":["      ","      ","      ","      ","      ","█████╗","╚════╝"],"`":["","","","","","",""],"a":[" █████╗ ","██╔══██╗","███████║","██╔══██║","██║  ██║","╚═╝  ╚═╝","        "],"b":["██╗     ","██║     ","██████╗ ","██╔══██╗","██████╔╝","╚═════╝ ","        "],"c":[" █████╗ ","██╔══██╗","██║    ","██║    ","╚██████║"," ╚═════╝","        "],"d":["     ██╗","     ██║"," ██████║","██╔══██║","╚██████║"," ╚═════╝","        "],"e":[" █████╗ ","██╔══██╗","███████║","██╔═══╝ ","╚██████║"," ╚═════╝","        "],"f":[" ████╗ ","██╔══╝ ","████╗  ","██╔═╝  ","██║    ","╚═╝    ","       "],"g":[" █████╗ ","██╔══██╗","███████║","██╔══██║","╚██████║"," ╚═════╝","        "],"h":["██╗     ","██║     ","██████╗ ","██╔══██╗","██║  ██║","╚═╝  ╚═╝","        "],"i":["██╗","╚═╝","██╗","██║","██║","╚═╝","   "],"j":["██╗","╚═╝","██╗","██║","██║","████╗","╚══╝"],"k":["██╗     ","██║     ","██║ ██╗ ","█████╔╝ ","██╔═██╗ ","╚═╝ ╚═╝ ","        "],"l":["██╗","██║","██║","██║","██║","╚═╝","   "],"m":["███╗ ███╗","████╗████║","██╔████╔██║","██║╚██╔╝██║","██║ ╚═╝ ██║","╚═╝     ╚═╝","            "],"n":["██████╗ ","██╔══██╗","██║  ██║","██║  ██║","██║  ██║","╚═╝  ╚═╝","        "],"o":[" █████╗ ","██╔══██╗","██║  ██║","██║  ██║","╚██████║"," ╚═════╝","        "],"p":["██████╗ ","██╔══██╗","██████╔╝","██╔═══╝ ","██║     ","╚═╝     ","        "],"q":[" █████╗ ","██╔══██╗","███████║","██╔══██║","╚██████║"," ╚═════╝","        "],"r":["██████╗ ","██╔══██╗","██████╔╝","██╔═══╝ ","██║     ","╚═╝     ","        "],"s":[" █████╗ ","██╔══██╗","╚█████╔╝","██╔══██╗","╚█████╔╝"," ╚════╝ ","        "],"t":[" ██╗"," ██║","████╗","╚═██║","██╔██║","╚═╝╚═╝","      "],"u":["██╗  ██╗","██║  ██║","██║  ██║","██║  ██║","╚██████║"," ╚═════╝","        "],"v":["██╗  ██╗","██║  ██║","██║  ██║","██║  ██║","╚██████║"," ╚═════╝","        "],"w":["██╗    ██╗","██║    ██║","██║ █╗ ██║","██║███╗██║","╚███╔███╔╝"," ╚══╝╚══╝ ","          "],"x":["██╗  ██╗","╚██╗██╔╝"," ╚███╔╝ "," ██╔██╗ ","██╔╝╚██╗","╚═╝  ╚═╝","        "],"y":["██╗  ██╗","╚██╗██╔╝"," ╚███╔╝ ","  ██╔╝  ","  ██║   ","  ╚═╝   ","        "],"z":["███████╗","   ╚═██╗"," █████╔╝","██╔═══╝ ","███████╗","╚══════╝","        "],"{":["","","","","","",""],"|":["","","","","","",""],"}":["","","","","","",""],"~":["","","","","","",""]}};
-var HEIGHT = FONT_DATA.height;
-var FONT = FONT_DATA.font;
+const FONT_DATA = {"height":7,"font":{"0":[" ██████╗ ","██╔═████╗","██║██╔██║","████╔╝██║","╚██████╔╝"," ╚═════╝ ","         "],"1":[" ██╗","███║","╚██║"," ██║"," ██║"," ╚═╝","    "],"2":["██████╗ ","╚════██╗"," █████╔╝","██╔═══╝ ","███████╗","╚══════╝","        "],"3":["██████╗ ","╚════██╗"," █████╔╝"," ╚═══██╗","██████╔╝","╚═════╝ ","        "],"4":["██╗  ██╗","██║  ██║","███████║","╚════██║","     ██║","     ╚═╝","        "],"5":["███████╗","██╔════╝","███████╗","╚════██║","███████║","╚══════╝","        "],"6":[" ██████╗ ","██╔════╝ ","███████╗ ","██╔═══██╗","╚██████╔╝"," ╚═════╝ ","         "],"7":["███████╗","╚════██║","    ██╔╝","   ██╔╝ ","   ██║  ","   ╚═╝  ","        "],"8":[" █████╗ ","██╔══██╗","╚█████╔╝","██╔══██╗","╚█████╔╝"," ╚════╝ ","        "],"9":[" █████╗ ","██╔══██╗","╚██████║"," ╚═══██║"," █████╔╝"," ╚════╝ ","        "]," ":["    ","    ","    ","    ","    ","    ","    "],"!":["██╗","██║","██║","╚═╝","██╗","╚═╝","   "],"\"":["","","","","","",""],"#":[" ██╗ ██╗ ","████████╗","╚██╔═██╔╝","████████╗","╚██╔═██╔╝"," ╚═╝ ╚═╝ ","         "],"$":["▄▄███▄▄·","██╔════╝","███████╗","╚════██║","███████║","╚═▀▀▀══╝","        "],"%":["██╗ ██╗","╚═╝██╔╝","  ██╔╝ "," ██╔╝  ","██╔╝██╗","╚═╝ ╚═╝","       "],"&":["   ██╗   ","   ██║   ","████████╗","██╔═██╔═╝","██████║  ","╚═════╝  ","         "],"'":["","","","","","",""],"(":[" ██╗","██╔╝","██║ ","██║ ","╚██╗"," ╚═╝","    "],")":["██╗ ","╚██╗"," ██║"," ██║","██╔╝","╚═╝ ","    "],"*":["      ","▄ ██╗▄"," ████╗","▀╚██╔▀","  ╚═╝ ","      ","      "],"+":["","","","","","",""],",":["   ","   ","   ","   ","▄█╗","╚═╝","   "],"-":["      ","      ","█████╗","╚════╝","      ","      ","      "],".":["   ","   ","   ","   ","██╗","╚═╝","   "],"/":["    ██╗","   ██╔╝","  ██╔╝ "," ██╔╝  ","██╔╝   ","╚═╝    ","       "],":":["   ","██╗","╚═╝","██╗","╚═╝","   ","   "],";":["   ","██╗","╚═╝","▄█╗","▀═╝","   ","   "],"<":["  ██╗"," ██╔╝","██╔╝ ","╚██╗ "," ╚██╗","  ╚═╝","     "],"=":["","","","","","",""],">":["██╗  ","╚██╗ "," ╚██╗"," ██╔╝","██╔╝ ","╚═╝  ","     "],"?":["██████╗ ","╚════██╗","  ▄███╔╝","  ▀▀══╝ ","  ██╗   ","  ╚═╝   ","        "],"@":[" ██████╗ ","██╔═══██╗","██║██╗██║","██║██║██║","╚█║████╔╝"," ╚╝╚═══╝ ","         "],"A":[" █████╗ ","██╔══██╗","███████║","██╔══██║","██║  ██║","╚═╝  ╚═╝","        "],"B":["██████╗ ","██╔══██╗","██████╔╝","██╔══██╗","██████╔╝","╚═════╝ ","        "],"C":[" ██████╗","██╔════╝","██║     ","██║     ","╚██████╗"," ╚═════╝","        "],"D":["██████╗ ","██╔══██╗","██║  ██║","██║  ██║","██████╔╝","╚═════╝ ","        "],"E":["███████╗","██╔════╝","█████╗  ","██╔══╝  ","███████╗","╚══════╝","        "],"F":["███████╗","██╔════╝","█████╗  ","██╔══╝  ","██║     ","╚═╝     ","        "],"G":[" ██████╗ ","██╔════╝ ","██║  ███╗","██║   ██║","╚██████╔╝"," ╚═════╝ ","         "],"H":["██╗  ██╗","██║  ██║","███████║","██╔══██║","██║  ██║","╚═╝  ╚═╝","        "],"I":["██╗","██║","██║","██║","██║","╚═╝","   "],"J":["     ██╗","     ██║","     ██║","██   ██║","╚█████╔╝"," ╚════╝ ","        "],"K":["██╗  ██╗","██║ ██╔╝","█████╔╝ ","██╔═██╗ ","██║  ██╗","╚═╝  ╚═╝","        "],"L":["██╗     ","██║     ","██║     ","██║     ","███████╗","╚══════╝","        "],"M":["███╗   ███╗","████╗ ████║","██╔████╔██║","██║╚██╔╝██║","██║ ╚═╝ ██║","╚═╝     ╚═╝","           "],"N":["███╗   ██╗","████╗  ██║","██╔██╗ ██║","██║╚██╗██║","██║ ╚████║","╚═╝  ╚═══╝","          "],"O":[" ██████╗ ","██╔═══██╗","██║   ██║","██║   ██║","╚██████╔╝"," ╚═════╝ ","         "],"P":["██████╗ ","██╔══██╗","██████╔╝","██╔═══╝ ","██║     ","╚═╝     ","        "],"Q":[" ██████╗ ","██╔═══██╗","██║   ██║","██║▄▄ ██║","╚██████╔╝"," ╚══▀▀═╝ ","         "],"R":["██████╗ ","██╔══██╗","██████╔╝","██╔══██╗","██║  ██║","╚═╝  ╚═╝","        "],"S":["███████╗","██╔════╝","███████╗","╚════██║","███████║","╚══════╝","        "],"T":["████████╗","╚══██╔══╝","   ██║   ","   ██║   ","   ██║   ","   ╚═╝   ","         "],"U":["██╗   ██╗","██║   ██║","██║   ██║","██║   ██║","╚██████╔╝"," ╚═════╝ ","         "],"V":["██╗   ██╗","██║   ██║","██║   ██║","╚██╗ ██╔╝"," ╚████╔╝ ","  ╚═══╝  ","         "],"W":["██╗    ██╗","██║    ██║","██║ █╗ ██║","██║███╗██║","╚███╔███╔╝"," ╚══╝╚══╝ ","          "],"X":["██╗  ██╗","╚██╗██╔╝"," ╚███╔╝ "," ██╔██╗ ","██╔╝ ██╗","╚═╝  ╚═╝","        "],"Y":["██╗   ██╗","╚██╗ ██╔╝"," ╚████╔╝ ","  ╚██╔╝  ","   ██║   ","   ╚═╝   ","         "],"Z":["███████╗","╚══███╔╝","  ███╔╝ "," ███╔╝  ","███████╗","╚══════╝","        "],"[":["███╗","██╔╝","██║ ","██║ ","███╗","╚══╝","    "],"\\":["","","","","","",""],"]":["███╗","╚██║"," ██║"," ██║","███║","╚══╝","    "],"^":[" ███╗ ","██╔██╗","╚═╝╚═╝","      ","      ","      ","      "],"_":["        ","        ","        ","        ","███████╗","╚══════╝","        "],"`":["","","","","","",""],"a":[" █████╗ ","██╔══██╗","███████║","██╔══██║","██║  ██║","╚═╝  ╚═╝","        "],"b":["██████╗ ","██╔══██╗","██████╔╝","██╔══██╗","██████╔╝","╚═════╝ ","        "],"c":[" ██████╗","██╔════╝","██║     ","██║     ","╚██████╗"," ╚═════╝","        "],"d":["██████╗ ","██╔══██╗","██║  ██║","██║  ██║","██████╔╝","╚═════╝ ","        "],"e":["███████╗","██╔════╝","█████╗  ","██╔══╝  ","███████╗","╚══════╝","        "],"f":["███████╗","██╔════╝","█████╗  ","██╔══╝  ","██║     ","╚═╝     ","        "],"g":[" ██████╗ ","██╔════╝ ","██║  ███╗","██║   ██║","╚██████╔╝"," ╚═════╝ ","         "],"h":["██╗  ██╗","██║  ██║","███████║","██╔══██║","██║  ██║","╚═╝  ╚═╝","        "],"i":["██╗","██║","██║","██║","██║","╚═╝","   "],"j":["     ██╗","     ██║","     ██║","██   ██║","╚█████╔╝"," ╚════╝ ","        "],"k":["██╗  ██╗","██║ ██╔╝","█████╔╝ ","██╔═██╗ ","██║  ██╗","╚═╝  ╚═╝","        "],"l":["██╗     ","██║     ","██║     ","██║     ","███████╗","╚══════╝","        "],"m":["███╗   ███╗","████╗ ████║","██╔████╔██║","██║╚██╔╝██║","██║ ╚═╝ ██║","╚═╝     ╚═╝","           "],"n":["███╗   ██╗","████╗  ██║","██╔██╗ ██║","██║╚██╗██║","██║ ╚████║","╚═╝  ╚═══╝","          "],"o":[" ██████╗ ","██╔═══██╗","██║   ██║","██║   ██║","╚██████╔╝"," ╚═════╝ ","         "],"p":["██████╗ ","██╔══██╗","██████╔╝","██╔═══╝ ","██║     ","╚═╝     ","        "],"q":[" ██████╗ ","██╔═══██╗","██║   ██║","██║▄▄ ██║","╚██████╔╝"," ╚══▀▀═╝ ","         "],"r":["██████╗ ","██╔══██╗","██████╔╝","██╔══██╗","██║  ██║","╚═╝  ╚═╝","        "],"s":["███████╗","██╔════╝","███████╗","╚════██║","███████║","╚══════╝","        "],"t":["████████╗","╚══██╔══╝","   ██║   ","   ██║   ","   ██║   ","   ╚═╝   ","         "],"u":["██╗   ██╗","██║   ██║","██║   ██║","██║   ██║","╚██████╔╝"," ╚═════╝ ","         "],"v":["██╗   ██╗","██║   ██║","██║   ██║","╚██╗ ██╔╝"," ╚████╔╝ ","  ╚═══╝  ","         "],"w":["██╗    ██╗","██║    ██║","██║ █╗ ██║","██║███╗██║","╚███╔███╔╝"," ╚══╝╚══╝ ","          "],"x":["██╗  ██╗","╚██╗██╔╝"," ╚███╔╝ "," ██╔██╗ ","██╔╝ ██╗","╚═╝  ╚═╝","        "],"y":["██╗   ██╗","╚██╗ ██╔╝"," ╚████╔╝ ","  ╚██╔╝  ","   ██║   ","   ╚═╝   ","         "],"z":["███████╗","╚══███╔╝","  ███╔╝ "," ███╔╝  ","███████╗","╚══════╝","        "],"{":["","","","","","",""],"|":["","","","","","",""],"}":["","","","","","",""],"~":["","","","","","",""]}};
+const HEIGHT = FONT_DATA.height;
+const FONT = FONT_DATA.font;
 
 function clockTick() {
-  var d = new Date();
-  var pad = function(n) { return String(n).padStart(2, '0'); };
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
   document.getElementById('clock').textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
 }
 clockTick();
 setInterval(clockTick, 1000);
 
-var T0 = 0.5 - 0.16, T1 = 0.5 + 0.16;
-var GLYPH_RECTS = {
+// --- Vector glyph patterns -------------------------------------------------
+// The FIGfont only ever uses 11 distinct glyph characters. Instead of relying
+// on the browser/OS font to draw box-drawing characters (which varies by
+// font, breaks at different line-heights, and blurs unpredictably under
+// text-shadow), each glyph is defined here as a set of simple rectangles in
+// a normalized 0..1 cell. The whole word is then drawn as one SVG. This is
+// 100% font-independent: it will look identical everywhere, at any size.
+const T0 = 0.5 - 0.16, T1 = 0.5 + 0.16; // thickness band for lines
+const GLYPH_RECTS = {
   ' ': [],
   '█': [[0, 0, 1, 1]],
   '▀': [[0, 0, 1, 0.5]],
@@ -426,129 +319,116 @@ var GLYPH_RECTS = {
   '╝': [[T0, 0, T1, 0.5], [0, T0, 0.5, T1]],
 };
 
-var CELL_W = 20;
-var CELL_H = 36;
-var FG_COLOR = '#39ff6a';
-var BG_COLOR = '#04140a';
+const CELL_W = 20;
+const CELL_H = 36;
 
 function glyphFor(ch) {
   if (FONT[ch]) return FONT[ch];
-  var upper = ch.toUpperCase();
+  const upper = ch.toUpperCase();
   if (FONT[upper]) return FONT[upper];
   return null;
 }
 
+// Builds the plain-text version (for copy / download / char counts).
 function renderText(text) {
   if (!text) return { art: '', unsupported: [], width: 0 };
-  var rows = new Array(HEIGHT).fill('');
-  var unsupported = [];
-  for (var i = 0; i < text.length; i++) {
-    var ch = text[i];
-    var glyph = glyphFor(ch);
+  const rows = new Array(HEIGHT).fill('');
+  const unsupported = [];
+  for (const ch of text) {
+    const glyph = glyphFor(ch);
     if (glyph) {
-      for (var r = 0; r < HEIGHT; r++) rows[r] += glyph[r];
+      for (let r = 0; r < HEIGHT; r++) rows[r] += glyph[r];
     } else {
-      if (ch.trim() !== '' && unsupported.indexOf(ch) === -1) unsupported.push(ch);
-      for (var r = 0; r < HEIGHT; r++) rows[r] += '   ';
+      if (ch.trim() !== '' && !unsupported.includes(ch)) unsupported.push(ch);
+      for (let r = 0; r < HEIGHT; r++) rows[r] += '   ';
     }
   }
-  var width = rows[0] ? rows[0].length : 0;
-  return { art: rows.join('\n'), unsupported: unsupported, width: width };
+  const width = rows[0] ? rows[0].length : 0;
+  return { art: rows.join('\n'), unsupported, width };
 }
 
-function renderSVG(text, cw, ch, fg, bg, transparent) {
-  cw = cw || CELL_W;
-  ch = ch || CELL_H;
-  fg = fg || FG_COLOR;
-  bg = bg || BG_COLOR;
-  if (!text) return { svg: '', downloadSvg: '', width: 0 };
-  var glyphs = [];
-  for (var i = 0; i < text.length; i++) {
-    var glyph = glyphFor(text[i]);
+// Builds the SVG (visual) version, font-independent.
+function renderSVG(text) {
+  if (!text) return { svg: '', width: 0 };
+  const glyphs = [];
+  for (const ch of text) {
+    const glyph = glyphFor(ch);
     glyphs.push(glyph || new Array(HEIGHT).fill('   '));
   }
-  var totalCols = glyphs.reduce(function(sum, g) { return sum + (g[0] ? g[0].length : 0); }, 0);
-  var svgW = totalCols * cw;
-  var svgH = HEIGHT * ch;
+  const totalCols = glyphs.reduce((sum, g) => sum + (g[0] ? g[0].length : 0), 0);
+  const svgW = totalCols * CELL_W;
+  const svgH = HEIGHT * CELL_H;
 
-  var rects = '';
-  var colOffset = 0;
-  for (var gi = 0; gi < glyphs.length; gi++) {
-    var glyph = glyphs[gi];
-    var cols = glyph[0] ? glyph[0].length : 0;
-    for (var r = 0; r < HEIGHT; r++) {
-      var line = glyph[r] || '';
-      for (var c = 0; c < cols; c++) {
-        var chGlyph = line[c] || ' ';
-        var pattern = GLYPH_RECTS[chGlyph];
+  let rects = '';
+  let colOffset = 0;
+  for (const glyph of glyphs) {
+    const cols = glyph[0] ? glyph[0].length : 0;
+    for (let r = 0; r < HEIGHT; r++) {
+      const line = glyph[r] || '';
+      for (let c = 0; c < cols; c++) {
+        const ch = line[c] || ' ';
+        const pattern = GLYPH_RECTS[ch];
         if (!pattern || pattern.length === 0) continue;
-        var cellX = (colOffset + c) * cw;
-        var cellY = r * ch;
-        for (var pi = 0; pi < pattern.length; pi++) {
-          var p = pattern[pi];
-          var x0 = p[0], y0 = p[1], x1 = p[2], y1 = p[3];
-          var rx = cellX + x0 * cw;
-          var ry = cellY + y0 * ch;
-          var rw = (x1 - x0) * cw;
-          var rh = (y1 - y0) * ch;
-          rects += '<rect x="' + rx.toFixed(2) + '" y="' + ry.toFixed(2) + '" width="' + rw.toFixed(2) + '" height="' + rh.toFixed(2) + '"/>';
+        const cellX = (colOffset + c) * CELL_W;
+        const cellY = r * CELL_H;
+        for (const [x0, y0, x1, y1] of pattern) {
+          const rx = cellX + x0 * CELL_W;
+          const ry = cellY + y0 * CELL_H;
+          const rw = (x1 - x0) * CELL_W;
+          const rh = (y1 - y0) * CELL_H;
+          rects += `<rect x="${rx.toFixed(2)}" y="${ry.toFixed(2)}" width="${rw.toFixed(2)}" height="${rh.toFixed(2)}"/>`;
         }
       }
     }
     colOffset += cols;
   }
 
-  var displaySvg = '<svg viewBox="0 0 ' + svgW + ' ' + svgH + '" width="' + svgW + '" height="' + svgH + '" xmlns="http://www.w3.org/2000/svg"><g fill="' + fg + '">' + rects + '</g></svg>';
+  const svg = `<svg viewBox="0 0 ${svgW} ${svgH}" width="${svgW}" height="${svgH}" xmlns="http://www.w3.org/2000/svg">
+    <g fill="var(--phosphor)">${rects}</g>
+  </svg>`;
 
-  var downloadSvg;
-  if (transparent) {
-    downloadSvg = '<svg viewBox="0 0 ' + svgW + ' ' + svgH + '" width="' + svgW + '" height="' + svgH + '" xmlns="http://www.w3.org/2000/svg"><g fill="' + fg + '">' + rects + '</g></svg>';
-  } else {
-    downloadSvg = '<svg viewBox="0 0 ' + svgW + ' ' + svgH + '" width="' + svgW + '" height="' + svgH + '" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="' + svgW + '" height="' + svgH + '" fill="' + bg + '"/><g fill="' + fg + '">' + rects + '</g></svg>';
-  }
+  // Standalone version for file download: hardcoded colors (no CSS vars),
+  // plus a dark background rect so it looks right when opened on its own.
+  const standaloneSvg = `<svg viewBox="0 0 ${svgW} ${svgH}" width="${svgW}" height="${svgH}" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="${svgW}" height="${svgH}" fill="#04140a"/>
+  <g fill="#39ff6a">${rects}</g>
+</svg>`;
 
-  return { svg: displaySvg, downloadSvg: downloadSvg, width: totalCols };
+  return { svg, standaloneSvg, width: totalCols };
 }
 
-var input = document.getElementById('textInput');
-var outputVisual = document.getElementById('outputVisual');
-var charcount = document.getElementById('charcount');
-var unsupportedNote = document.getElementById('unsupportedNote');
-var dimsFooter = document.getElementById('dimsFooter');
-var dimHint = document.getElementById('dimHint');
+const input = document.getElementById('textInput');
+const outputVisual = document.getElementById('outputVisual');
+const charcount = document.getElementById('charcount');
+const unsupportedNote = document.getElementById('unsupportedNote');
+const dimsFooter = document.getElementById('dimsFooter');
+const dimHint = document.getElementById('dimHint');
 
-var currentArt = '';
-var currentDownloadSvg = '';
+let currentArt = '';
+let currentSVG = '';
 
 function update() {
-  var val = input.value;
+  const val = input.value;
   charcount.textContent = val.length + ' / 40';
   charcount.classList.toggle('over', val.length >= 40);
 
-  var renderResult = renderText(val);
-  currentArt = renderResult.art;
-  var unsupported = renderResult.unsupported;
+  const { art, unsupported } = renderText(val);
+  currentArt = art;
 
   if (!val) {
     outputVisual.innerHTML = '<span class="placeholder">여기에 결과가 표시됩니다. 위 칸에 텍스트를 입력해보세요.</span>';
     dimsFooter.textContent = 'READY';
     dimHint.textContent = '';
     unsupportedNote.textContent = '';
-    currentDownloadSvg = '';
+    currentSVG = '';
     return;
   }
 
-  var cw = parseInt(document.getElementById('cellWidthSlider').value);
-  var ch = parseInt(document.getElementById('cellHeightSlider').value);
-  var fg = document.getElementById('fgColorPicker').value;
-  var bg = document.getElementById('bgColorPicker').value;
-  var transparent = document.getElementById('transparentBg').checked;
-
-  var svgResult = renderSVG(val, cw, ch, fg, bg, transparent);
-  outputVisual.innerHTML = svgResult.svg;
-  currentDownloadSvg = svgResult.downloadSvg;
-  dimsFooter.textContent = svgResult.width + ' COLS x ' + HEIGHT + ' ROWS';
-  dimHint.textContent = svgResult.width + 'x' + HEIGHT;
+  const { svg, standaloneSvg, width } = renderSVG(val);
+  outputVisual.innerHTML = svg;
+  currentSVG = standaloneSvg;
+  dimsFooter.textContent = width + ' COLS x ' + HEIGHT + ' ROWS';
+  dimHint.textContent = width + 'x' + HEIGHT;
 
   if (unsupported.length) {
     unsupportedNote.textContent = '미지원 문자: ' + unsupported.join(' ');
@@ -562,13 +442,13 @@ input.value = 'SUPER';
 update();
 
 function showToast(msg) {
-  var toast = document.getElementById('toast');
+  const toast = document.getElementById('toast');
   toast.textContent = msg;
   toast.classList.add('show');
-  setTimeout(function() { toast.classList.remove('show'); }, 1600);
+  setTimeout(() => toast.classList.remove('show'), 1600);
 }
 
-document.getElementById('copyBtn').addEventListener('click', async function() {
+document.getElementById('copyBtn').addEventListener('click', async () => {
   if (!currentArt || !input.value) { showToast('먼저 텍스트를 입력하세요'); return; }
   try {
     await navigator.clipboard.writeText(currentArt);
@@ -578,17 +458,17 @@ document.getElementById('copyBtn').addEventListener('click', async function() {
   }
 });
 
-document.getElementById('clearBtn').addEventListener('click', function() {
+document.getElementById('clearBtn').addEventListener('click', () => {
   input.value = '';
   update();
   input.focus();
 });
 
-document.getElementById('downloadBtn').addEventListener('click', function() {
+document.getElementById('downloadBtn').addEventListener('click', () => {
   if (!currentArt || !input.value) { showToast('먼저 텍스트를 입력하세요'); return; }
-  var blob = new Blob([currentArt], { type: 'text/plain;charset=utf-8' });
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
+  const blob = new Blob([currentArt], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
   a.href = url;
   a.download = (input.value.replace(/[^a-zA-Z0-9]/g, '_') || 'ascii_art') + '.txt';
   document.body.appendChild(a);
@@ -598,11 +478,11 @@ document.getElementById('downloadBtn').addEventListener('click', function() {
   showToast('다운로드 시작');
 });
 
-document.getElementById('downloadSvgBtn').addEventListener('click', function() {
-  if (!currentDownloadSvg || !input.value) { showToast('먼저 텍스트를 입력하세요'); return; }
-  var blob = new Blob([currentDownloadSvg], { type: 'image/svg+xml;charset=utf-8' });
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
+document.getElementById('downloadSvgBtn').addEventListener('click', () => {
+  if (!currentSVG || !input.value) { showToast('먼저 텍스트를 입력하세요'); return; }
+  const blob = new Blob([currentSVG], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
   a.href = url;
   a.download = (input.value.replace(/[^a-zA-Z0-9]/g, '_') || 'ascii_art') + '.svg';
   document.body.appendChild(a);
@@ -612,146 +492,6 @@ document.getElementById('downloadSvgBtn').addEventListener('click', function() {
   showToast('SVG 다운로드 시작');
 });
 
-// --- SVG Settings Toggle ---
-var svgSettingsToggle = document.getElementById('svgSettingsToggle');
-var svgSettings = document.getElementById('svgSettings');
-svgSettingsToggle.addEventListener('click', function() {
-  svgSettings.classList.toggle('open');
-  svgSettingsToggle.textContent = svgSettings.classList.contains('open') ? '▲ SVG SETTINGS' : '▼ SVG SETTINGS';
-});
-
-// --- SVG Controls ---
-var cellWidthSlider = document.getElementById('cellWidthSlider');
-var cellHeightSlider = document.getElementById('cellHeightSlider');
-var cellWidthVal = document.getElementById('cellWidthVal');
-var cellHeightVal = document.getElementById('cellHeightVal');
-var fgColorPicker = document.getElementById('fgColorPicker');
-var bgColorPicker = document.getElementById('bgColorPicker');
-var transparentBg = document.getElementById('transparentBg');
-
-cellWidthSlider.addEventListener('input', function() {
-  cellWidthVal.textContent = this.value;
-  update();
-});
-cellHeightSlider.addEventListener('input', function() {
-  cellHeightVal.textContent = this.value;
-  update();
-});
-fgColorPicker.addEventListener('input', update);
-bgColorPicker.addEventListener('input', update);
-transparentBg.addEventListener('change', update);
-
-// --- Font Generation ---
-var EMPTY_CHARS = ['"', "'", '+', '=', '\\', '`', '{', '|', '}', '~'];
-
-function buildFontPath(ch, cs) {
-  var art = FONT[ch];
-  if (!art) return null;
-  var cols = art[0] ? art[0].length : 0;
-  if (cols === 0) return null;
-  var path = new opentype.Path();
-  for (var r = 0; r < HEIGHT; r++) {
-    var line = art[r] || '';
-    for (var c = 0; c < cols; c++) {
-      var chGlyph = line[c] || ' ';
-      var rects = GLYPH_RECTS[chGlyph];
-      if (!rects || rects.length === 0) continue;
-      for (var pi = 0; pi < rects.length; pi++) {
-        var p = rects[pi];
-        var x0 = p[0], y0 = p[1], x1 = p[2], y1 = p[3];
-        var fx = (c + x0) * cs;
-        var fw = (x1 - x0) * cs;
-        var fy_bottom = (HEIGHT - r - y1) * cs;
-        var fh = (y1 - y0) * cs;
-        if (fw < 0.5 || fh < 0.5) continue;
-        path.moveTo(fx, fy_bottom);
-        path.lineTo(fx + fw, fy_bottom);
-        path.lineTo(fx + fw, fy_bottom + fh);
-        path.lineTo(fx, fy_bottom + fh);
-        path.closePath();
-      }
-    }
-  }
-  return path;
-}
-
-function generateFont(fontName) {
-  var cs = 1000 / HEIGHT;
-  var glyphs = [];
-
-  var notdef = new opentype.Glyph({
-    name: '.notdef',
-    unicode: 0,
-    advanceWidth: cs * 3,
-    path: new opentype.Path()
-  });
-  glyphs.push(notdef);
-
-  var charKeys = Object.keys(FONT).filter(function(k) { return k.length === 1; });
-  charKeys.sort(function(a, b) { return a.charCodeAt(0) - b.charCodeAt(0); });
-
-  for (var i = 0; i < charKeys.length; i++) {
-    var ch = charKeys[i];
-    var art = FONT[ch];
-    if (!art) continue;
-    var cols = art[0] ? art[0].length : 0;
-    var advWidth = cols > 0 ? cols * cs : cs * 3;
-    var glyphPath;
-    if (cols > 0 && EMPTY_CHARS.indexOf(ch) === -1) {
-      glyphPath = buildFontPath(ch, cs);
-    }
-    var glyph = new opentype.Glyph({
-      name: ch,
-      unicode: ch.charCodeAt(0),
-      advanceWidth: Math.max(advWidth, cs),
-      path: glyphPath || new opentype.Path()
-    });
-    glyphs.push(glyph);
-  }
-
-  var font = new opentype.Font({
-    familyName: fontName || 'ASCII Shadow Custom',
-    styleName: 'Regular',
-    unitsPerEm: 1000,
-    ascender: 1000,
-    descender: 0,
-    glyphs: glyphs
-  });
-  return font;
-}
-
-function downloadFont(ext) {
-  var fontName = document.getElementById('fontNameInput').value || 'ASCII Shadow Custom';
-  if (typeof opentype === 'undefined') {
-    showToast('opentype.js 로딩 실패 - 새로고침 후 다시 시도');
-    return;
-  }
-  try {
-    var font = generateFont(fontName);
-    var buffer = font.toArrayBuffer();
-    var blob = new Blob([buffer], { type: 'font/' + ext });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = fontName.replace(/[^a-zA-Z0-9\-_ ]/g, '') + '.' + ext;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    showToast('폰트 다운로드 완료 (. ' + ext.toUpperCase() + ')');
-  } catch (e) {
-    showToast('폰트 생성 실패: ' + e.message);
-    console.error(e);
-  }
-}
-
-document.getElementById('downloadTtfBtn').addEventListener('click', function() {
-  downloadFont('ttf');
-});
-
-document.getElementById('downloadOtfBtn').addEventListener('click', function() {
-  downloadFont('otf');
-});
 </script>
 </body>
 </html>
